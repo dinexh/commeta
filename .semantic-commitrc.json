@@ -1,0 +1,9 @@
+{
+  "mode": "interactive",
+  "llm": {
+    "adapter": "groq",
+    "model": "mixtral-8x7b",
+    "apiKeyEnv": "GROQ_API_KEY"
+  }
+}
+  

@@ -1,0 +1,23 @@
+{
+  "name": "commeta",
+  "version": "0.1.0",
+  "description": "Local semantic commit message generator (prototype)",
+  "main": "dist/index.js",
+  "bin": {
+    "commeta": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "build": "tsc -p .",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "commander": "^11.0.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.5.6",
+    "@types/node": "^20.5.1"
+  }
+}
