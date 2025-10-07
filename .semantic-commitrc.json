@@ -2,7 +2,7 @@
   "mode": "interactive",
   "llm": {
     "adapter": "groq",
-    "model": "mixtral-8x7b",
+    "model": "llama-3.1-8b-instant",
     "apiKeyEnv": "GROQ_API_KEY"
   }
 }
