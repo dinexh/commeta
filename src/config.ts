@@ -3,7 +3,7 @@ import path from 'path';
 
 const DEFAULT = {
   mode: 'interactive',
-  llm: { adapter: 'local', model: 'mistral', localCommand: 'ollama run mistral --stdin' }
+  llm: { adapter: 'groq', model: 'llama-3.1-8b-instant', apiKeyEnv: 'GROQ_API_KEY' }
 };
 
 export function loadConfig() {

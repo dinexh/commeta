@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { program } from 'commander';
 import { runCLI } from './cli';
+import { program } from 'commander';
 
 program
   .name('commeta')

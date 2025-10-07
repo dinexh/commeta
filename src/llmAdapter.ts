@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
 import { loadConfig } from './config';
+import dotenv from 'dotenv';
 
 // Load environment variables from .env file
 dotenv.config();
@@ -13,7 +13,7 @@ export async function callLLM(prompt: string): Promise<string> {
       throw new Error('Missing GROQ_API_KEY');
     }
 
-    const model = cfg.llm.model || 'mixtral-8x7b';
+    const model = cfg.llm.model || 'llama-3.1-8b-instant';
 
     try {
       const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {

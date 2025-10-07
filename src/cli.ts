@@ -1,7 +1,6 @@
+import { callLLM } from './llmAdapter';
 import { readStagedDiff, writeCommitMsgFile } from './git';
 import { buildPrompt } from './promptTemplates';
-import { callLLM } from './llmAdapter';
-import fs from 'fs';
 import path from 'path';
 
 export async function runCLI(opts: any) {
