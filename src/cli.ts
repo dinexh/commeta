@@ -8,7 +8,7 @@ export async function runCLI(opts: any) {
   const diff = await readStagedDiff();
   if (!diff || diff.trim().length === 0) {
     console.log('No staged diff found. Stage files first (git add).');
-    process.exit(0);
+    return;
   }
 
   const prompt = buildPrompt(diff);
@@ -26,8 +26,10 @@ export async function runCLI(opts: any) {
       // spawn git commit
       try {
         require('child_process').execSync(`git commit -F ${commitPath}`, { stdio: 'inherit' });
+        process.exit(0);
       } catch (e) {
         console.error('git commit failed:', e);
+        process.exit(1);
       }
     }
     return;
@@ -42,7 +44,13 @@ export async function runCLI(opts: any) {
     const commitPath = opts.hook || path.join('.git', 'COMMIT_EDITMSG');
     writeCommitMsgFile(commitPath, suggestion + '\n');
     if (!opts.hook) {
-      try { require('child_process').execSync(`git commit -F ${commitPath}`, { stdio: 'inherit' }); } catch(e){ console.error('git commit failed:', e); }
+      try {
+        require('child_process').execSync(`git commit -F ${commitPath}`, { stdio: 'inherit' });
+        process.exit(0);
+      } catch(e){
+        console.error('git commit failed:', e);
+        process.exit(1);
+      }
     }
     return;
   } else {
@@ -53,8 +61,15 @@ export async function runCLI(opts: any) {
     const commitPath = opts.hook || path.join('.git', 'COMMIT_EDITMSG');
     writeCommitMsgFile(commitPath, edited + '\n');
     if (!opts.hook) {
-      try { require('child_process').execSync(`git commit -F ${commitPath}`, { stdio: 'inherit' }); } catch(e){ console.error('git commit failed:', e); }
+      try {
+        require('child_process').execSync(`git commit -F ${commitPath}`, { stdio: 'inherit' });
+        process.exit(0);
+      } catch(e){
+        console.error('git commit failed:', e);
+        process.exit(1);
+      }
     }
+    return;
   }
 }
 
@@ -74,10 +89,24 @@ function readMultilineFromStdin() {
   return new Promise<string>((resolve) => {
     const lines: string[] = [];
     process.stdin.setEncoding('utf8');
+    let isFirstChunk = true;
 
     process.stdin.on('data', (chunk) => {
       const s = String(chunk);
-      if (s.trim() === '') {
+
+      // Handle the first chunk (initial prompt response)
+      if (isFirstChunk) {
+        isFirstChunk = false;
+        // If user just presses enter immediately, treat as empty
+        if (s.trim() === '' || s === '\n' || s === '\r\n') {
+          process.stdin.removeAllListeners('data');
+          resolve('');
+          return;
+        }
+      }
+
+      // Check for empty line (user pressed enter on a line with no text)
+      if (s.trim() === '' || s === '\n' || s === '\r\n') {
         process.stdin.removeAllListeners('data');
         resolve(lines.join('\n'));
       } else {
