@@ -1,7 +1,7 @@
 {
-  "name": "commeta",
-  "version": "0.1.0",
-  "description": "Local semantic commit message generator (prototype)",
+  "name": "commeta-cli",
+  "version": "1.0.0",
+  "description": "A CLI tool that generates semantic git commit messages using AI/LLM services like Groq",
   "main": "dist/index.js",
   "bin": {
     "commeta": "dist/index.js"
@@ -10,6 +10,31 @@
     "dev": "ts-node src/index.ts",
     "build": "tsc -p .",
     "start": "node dist/index.js"
+  },
+  "keywords": [
+    "git",
+    "commit",
+    "semantic",
+    "ai",
+    "llm",
+    "groq",
+    "conventional-commits",
+    "automation",
+    "cli",
+    "typescript"
+  ],
+  "author": "Dinesh",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dinexh/commeta.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dinexh/commeta/issues"
+  },
+  "homepage": "https://github.com/dinexh/commeta#readme",
+  "engines": {
+    "node": ">=14.0.0"
   },
   "dependencies": {
     "commander": "^11.0.0",
