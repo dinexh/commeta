@@ -12,14 +12,11 @@ export async function runCLI(opts: any) {
   }
 
   const prompt = buildPrompt(diff);
-  console.log('Built prompt (truncated):', prompt.slice(0, 400));
 
   // call the configured LLM adapter
   const suggestion = await callLLM(prompt);
 
-  console.log('\n--- Suggested commit message ---\n');
   console.log(suggestion);
-  console.log('\n-------------------------------\n');
 
   if (opts.yes) {
     // write directly to COMMIT_EDITMSG and run commit if not in hook
@@ -37,7 +34,7 @@ export async function runCLI(opts: any) {
   }
 
   // interactive accept/edit
-  const input = await promptYesNo('Accept suggested message? (y = accept / e = edit / n = abort) [y/e/n]: ');
+  const input = await promptYesNo('Accept? (y = accept / e = edit / n = abort) [y/e/n]: ');
   if (input === 'n') {
     console.log('Aborting.');
     process.exit(1);
@@ -50,7 +47,7 @@ export async function runCLI(opts: any) {
     return;
   } else {
     // edit flow
-    console.log('Enter your commit message. End with an empty line.');
+    console.log('Enter your commit message (end with empty line):');
     const edited = await readMultilineFromStdin();
     if (!edited.trim()) { console.log('Empty message. Aborting.'); process.exit(1); }
     const commitPath = opts.hook || path.join('.git', 'COMMIT_EDITMSG');
@@ -62,10 +59,14 @@ export async function runCLI(opts: any) {
 }
 
 function promptYesNo(question: string) {
-  return new Promise<string>((res) => {
+  return new Promise<string>((resolve) => {
     process.stdout.write(question);
     process.stdin.setEncoding('utf8');
-    process.stdin.once('data', (d) => res(String(d).trim().toLowerCase()));
+    process.stdin.once('data', (d) => {
+      const input = String(d).trim().toLowerCase();
+      resolve(input);
+    });
+    process.stdin.once('end', () => resolve('n')); // Default to abort on EOF
   });
 }
 
@@ -73,6 +74,7 @@ function readMultilineFromStdin() {
   return new Promise<string>((resolve) => {
     const lines: string[] = [];
     process.stdin.setEncoding('utf8');
+
     process.stdin.on('data', (chunk) => {
       const s = String(chunk);
       if (s.trim() === '') {
@@ -82,7 +84,7 @@ function readMultilineFromStdin() {
         lines.push(s.replace(/\r?\n$/, ''));
       }
     });
-    // prompt
+
     process.stdout.write('> ');
   });
 }

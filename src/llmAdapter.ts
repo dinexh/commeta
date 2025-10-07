@@ -16,7 +16,6 @@ export async function callLLM(prompt: string): Promise<string> {
     const model = cfg.llm.model || 'mixtral-8x7b';
 
     try {
-      console.log(`Making request to Groq API with model: ${model}`);
       const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -34,25 +33,19 @@ export async function callLLM(prompt: string): Promise<string> {
         }),
       });
 
-      console.log(`Response status: ${response.status}`);
-
       if (!response.ok) {
         const errorText = await response.text();
-        console.error(`Groq API error: ${response.status} - ${errorText}`);
-        return `feat: fix api error\n\nGroq API returned error: ${response.status}\n${errorText}`;
+        return `feat: fix api error\n\nAPI Error: ${response.status}`;
       }
 
       const data = await response.json();
-      console.log(`Response data keys: ${Object.keys(data)}`);
 
       if (data.error) {
-        console.error(`Groq API error in response: ${JSON.stringify(data.error)}`);
         return `feat: fix api error\n\nAPI Error: ${data.error.message}`;
       }
 
       return data.choices?.[0]?.message?.content?.trim() || 'No response from API';
     } catch (error: any) {
-      console.error(`Error calling Groq API: ${error.message}`);
       return `feat: fix api error\n\nError calling Groq API: ${error.message}`;
     }
   }
