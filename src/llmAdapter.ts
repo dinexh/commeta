@@ -25,7 +25,7 @@ export async function callLLM(prompt: string): Promise<string> {
         body: JSON.stringify({
           model,
           messages: [
-            { role: 'system', content: 'You are a semantic commit generator following Conventional Commits.' },
+            { role: 'system', content: 'You are a semantic commit generator. Generate only the commit message following Conventional Commits format. Do not use markdown formatting like **bold** or *italic*.' },
             { role: 'user', content: prompt },
           ],
           temperature: 0.3,
