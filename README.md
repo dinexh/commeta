@@ -200,6 +200,12 @@ MIT © [Dinesh](https://github.com/yourusername)
 
 ## Changelog
 
+### v1.0.1
+- Fixed CLI process exit handling
+- Improved error handling and user feedback
+- Cleaned up codebase and removed unused code
+- Enhanced README with comprehensive documentation
+
 ### v1.0.0
 - Initial release
 - Groq API integration

@@ -1,6 +1,6 @@
 {
   "name": "commeta-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CLI tool that generates semantic git commit messages using AI/LLM services like Groq",
   "main": "dist/index.js",
   "bin": {
